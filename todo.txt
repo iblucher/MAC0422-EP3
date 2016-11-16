@@ -2,7 +2,7 @@ TO-DO:
 
 - Simulador (gerenciador de memória)
 	- criar diretório tmp
-	- ler arquivo de trace e pegar informações 
+	- ler arquivo de trace e pegar informações
 	- criar arquivos que representam as memórias
 	- criar estrutura pros processos lidos no trace (priority_queue, vector)
 	- bitmap pra cada uma das memórias (bitset)
@@ -64,3 +64,13 @@ TO-DO:
 		i++;
 	}
 	
+
+
+        char buffer[512];
+
+    if (stat ("/tmp", NULL) == -1)
+        mkdir ("/tmp", 0700);
+
+    sprintf (buffer, "/tmp/%s", nome);
+    arquivo = fopen (buffer, "r");
+
