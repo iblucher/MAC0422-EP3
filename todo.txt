@@ -1,6 +1,11 @@
 TO-DO:
 
 - Simulador (gerenciador de memória)
+	- criar diretório tmp
+	- ler arquivo de trace e pegar informações 
+	- criar arquivos que representam as memórias
+	- estrutura pros processos 
+	- colocar processos na memória virtual 
 
 - Implementar algoritmos de gerência de espaço livre:
 	- First Fit
