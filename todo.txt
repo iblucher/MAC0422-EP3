@@ -4,8 +4,16 @@ TO-DO:
 	- criar diretório tmp
 	- ler arquivo de trace e pegar informações 
 	- criar arquivos que representam as memórias
-	- estrutura pros processos 
-	- colocar processos na memória virtual 
+	- criar estrutura pros processos lidos no trace (priority_queue, vector)
+	- bitmap pra cada uma das memórias (bitset)
+	- colocar processos na memória virtual quando bater o t0 respectivo (algoritmo de gerencia)
+	- estrutura X que mantém os processos ativos
+	- percorre e verifica a estrutra X e quando bater o t_i de cada acesso, colocar página p_i
+	na memória física:
+		- verificar facilmente se a página está na memória física (tabelão de páginas)
+		- se não estiver, page fault: tratar de acordo com o algoritmo de substituição
+	- quando bater todos os tfs, o algoritmo termina e então fim da simulação!
+	- talvez utilizar uma thread para imprimir
 
 - Implementar algoritmos de gerência de espaço livre:
 	- First Fit
@@ -21,4 +29,38 @@ TO-DO:
 
 - Testes
 	- Para algoritmos de gerência de espaço: medir tempo necessário para encontrar um espaço livre
-	- Para algoritmos de substituição de páginas: medir quantidade de page faults 	
+	- Para algoritmos de substituição de páginas: medir quantidade de page faults 
+
+
+* QUOTE:
+	Não é necessário simular o tempo real. Vocês tem que simular aqueles acessos à memória. Ou seja, não precisa ter uma thread representando cada processo e cada um deles executando durante a execução do simulador. Basta agendar eventos no simulador que ocorrerão nos instantes de acesso à memória.
+
+
+	RASCUNHO:
+
+	memória virtual: múltiplo de p
+	memória física: múltiplo de s (sim, é múltiplo de s - tem dúvida no PACA)
+	bitmap pra memória virtual e memória física (?)
+	utilizar long (pois num max de proc é 2^32)
+	tabela de páginas
+
+	while (t0 de próximo proc_i não bateu) {
+		foreach (proc : X) {
+			if (proc.tf não bateu) {
+				if (proc.ti bateu) {
+					if (proc.pi não está na memória física)
+						algoritmo de substituição (proc.pi);
+						e todas as m3rd4s que isso causa na memória física
+						não esquecer das tabelas, amore
+				}
+			} else {
+				X.remove(proc);
+			}
+		}
+	}
+
+		X.insere (proc_i);
+		e todas as m3rd4s que isso causa na memória virtual
+		i++;
+	}
+	
