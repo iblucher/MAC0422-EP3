@@ -1,0 +1,19 @@
+TO-DO:
+
+- Simulador (gerenciador de memória)
+
+- Implementar algoritmos de gerência de espaço livre:
+	- First Fit
+	- Next Fit
+	- Best Fit
+	- Worst Fit
+
+- Implementar algoritmos de susbstituição de páginas
+	- Optimal (com lista de rótulos)
+	- Second Chance 
+	- Clock
+	- LRU (quarta versão feat. aging)
+
+- Testes
+	- Para algoritmos de gerência de espaço: medir tempo necessário para encontrar um espaço livre
+	- Para algoritmos de substituição de páginas: medir quantidade de page faults 	
