@@ -14,3 +14,6 @@ classes: $(CLASSES:.java=.class)
 
 clean:
 		$(RM) *.class
+
+run:
+	java -cp .:stdlib.jar Simulator

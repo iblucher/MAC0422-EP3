@@ -13,17 +13,36 @@ import java.util.*;
 
 public class Simulator {
 
+    static Simulator sim;
     int total, virtual, s, p;
+
+    public void createDirectory () {
+        File dir = new File ("tmp/");
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+    }
 
     public void loadFile (String name) {
         In in = new In(name);
+        total = in.readInt();
+        virtual = in.readInt();
+        s = in.readInt();
+        p = in.readInt();
 
         StdOut.println ("Arquivo é: " + name);
+        StdOut.printf ("%d %d %d %d\n", total, virtual, s, p);
+
+        sim.createDirectory();
+
+        while (!in.isEmpty()) {
+            // leitura do resto do trace (existe um vector para Java)
+        }
     }
 
     public static void main (String[] args) throws java.io.IOException {
 
-        Simulator sim = new Simulator();
+        sim = new Simulator();
         In in = new In();
 
         String line;
