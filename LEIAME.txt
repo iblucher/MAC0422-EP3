@@ -1,0 +1,8 @@
+README DO EP3 
+
+Como compilar:
+
+OS X / Linux
+------------
+% javac -cp .:stdlib.jar MyProgram.java
+% java  -cp .:stdlib.jar MyProgram
