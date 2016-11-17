@@ -1,8 +1,21 @@
-README DO EP3 
+/*******************************************************************************
+ *  EP3 de MAC0422 (Sistemas Operacionais)
+ *
+ *  Isabela Blucher - 9298170
+ *  Andre Victor dos Santos Nakazawa - 9298336
+ * 
+ *  README DO EP3
+ *
+*******************************************************************************/
 
-Como compilar:
+- Dependências: 
+	Como estamos usando bibliotecas padrão do livro "Introduction to Programming
+	in Java" do Robert Sedgewick (link: http://introcs.cs.princeton.edu/java/stdlib/)
+	é necessário ter o arquivo stdlib.jar que enviamos junto ao .tar.gz do EP no
+	mesmo diretório que o código-fonte. 
 
-OS X / Linux
-------------
-% javac -cp .:stdlib.jar MyProgram.java
-% java  -cp .:stdlib.jar MyProgram
+- Compilação:
+	Para compilar apenas digite no terminal o comando "make".
+
+- Execução:
+	Para rodar apenas digite no terminal o comando "make run". 

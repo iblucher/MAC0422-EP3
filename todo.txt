@@ -1,7 +1,7 @@
 TO-DO:
 
 - Simulador (gerenciador de memória)
-	- criar diretório tmp
+	+ criar diretório tmp
 	- ler arquivo de trace e pegar informações
 	- criar arquivos que representam as memórias
 	- criar estrutura pros processos lidos no trace (priority_queue, vector)
