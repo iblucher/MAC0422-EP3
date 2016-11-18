@@ -3,10 +3,11 @@ JC = javac
 .SUFFIXES: .java .class
 
 .java.class:
-		$(JC) -cp .:stdlib.jar $*.java
+		$(JC) -cp .:lib.jar $*.java
 
 CLASSES = \
 	  Simulator.java \
+      Process.java \
 
 default: classes
 
@@ -16,4 +17,4 @@ clean:
 		$(RM) *.class
 
 run:
-	java -cp .:stdlib.jar Simulator
+	java -cp .:lib.jar Simulator

@@ -9,13 +9,15 @@
 *******************************************************************************/
 
 import java.io.*;
+import java.util.Scanner;
 
 public class Simulator {
-
     static Simulator sim; // objeto da classe Simulator
+    int total, virtual, s, p; // valores dados na primeira linha do trace
     static BinaryOut outTot, outVir; // arquivos binários
     long[] memTot, memVir; // vetores que representam o conteúdos dos arquivos
-    int total, virtual, s, p; // valores dados na primeira linha do trace
+    Process[] plist;
+    int num_process;
 
     public void createDirectory () {
         File dir = new File ("/tmp/");
@@ -40,10 +42,36 @@ public class Simulator {
 
         sim.initMemory();
 
-        //while (!in.isEmpty()) {
-            // leitura do resto do trace (existe um vector para Java)
-            // criar uma estrutura que armazena as características dos processos (o que está no trace)
-        //}
+        num_process = 2;
+        plist = new Process[num_process];
+
+        int i;
+        for (i = 0; !in.isEmpty(); i++) {
+            if (i >= num_process) {
+                Process[] temp = new Process[2 * num_process];
+                for (int j = 0; j < num_process; j++) {
+                    temp[j] = plist[j];
+                }
+                plist = temp;
+                num_process *= 2;
+            }
+
+            double t0 = in.readDouble();
+            String nome = in.readString();
+            double tf = in.readDouble();
+            long b = in.readLong();
+
+            plist[i] = new Process(i, t0, nome, tf, b);
+            String line = in.readLine();
+            Scanner s = new Scanner(line);
+            while (s.hasNextLong()) {
+                long p = s.nextLong();
+                double t = s.nextDouble();
+                plist[i].newAccess(p, t);
+            }
+        }
+
+        num_process = i;
     }
 
     public void initMemory () {
