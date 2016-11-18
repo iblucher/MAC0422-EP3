@@ -3,7 +3,7 @@ TO-DO:
 - Simulador (gerenciador de memória)
 	+ criar diretório tmp
 	- ler arquivo de trace e pegar informações
-	- criar arquivos que representam as memórias
+	+ criar arquivos que representam as memórias
 	- criar estrutura pros processos lidos no trace (priority_queue, vector)
 	- bitmap pra cada uma das memórias (bitset)
 	- colocar processos na memória virtual quando bater o t0 respectivo (algoritmo de gerencia)
