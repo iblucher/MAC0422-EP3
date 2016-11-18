@@ -1,13 +1,19 @@
 TO-DO:
 
+- Marotagem
+	- tabela de páginas
+	- impressão
+	- atualização dos arquivos
+
+
 - Simulador (gerenciador de memória)
 	+ criar diretório tmp
 	+ ler arquivo de trace e pegar informações
 	+ criar arquivos que representam as memórias
 	+ criar estrutura pros processos lidos no trace (priority_queue, vector)
 	+ bitmap pra cada uma das memórias (bitset)
+	+ estrutura X que mantém os processos ativos (red black bst)
 	- colocar processos na memória virtual quando bater o t0 respectivo (algoritmo de gerencia)
-	- estrutura X que mantém os processos ativos
 	- percorre e verifica a estrutra X e quando bater o t_i de cada acesso, colocar página p_i
 	na memória física:
 		- verificar facilmente se a página está na memória física (tabelão de páginas)

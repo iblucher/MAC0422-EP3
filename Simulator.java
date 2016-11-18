@@ -10,6 +10,7 @@
 
 import java.io.*;
 import java.util.Scanner;
+import java.util.BitSet;
 
 public class Simulator {
 
@@ -100,8 +101,49 @@ public class Simulator {
     }
 
     public void simulate (int m, int r, int interval) {
+        RedBlackBST<Integer> set = new RedBlackBST<Integer>();
+        SpaceManagement virtualMemory = new SpaceManagement(m);
+        PageReplacement physicalMemory = new PageReplacement(r);
+        long startTime = System.nanoTime();
         
+        for (int i = 0; i < num_process; i++) {
+            while ((double)(System.nanoTime() - startTime)/10e+9 < plist[i].t0()) {
+                for (int j : set.keys()) {
+                    double t = proc[j].nextAccessTime();
+
+                    if ((double)(System.nanoTime() - startTime)/10e+9 < t) {
+                        long p = proc[j].nextAccessPage();
+                        physicalMemory.insert(memTot, bitTot, proc[j], p);
+                    }
+
+                    if ((double)(System.nanoTime() - startTime)/10e+9 < proc[j].tf) {
+                        virtualMemory.remove(memVir, bitVir, proc[i]);
+                        set.delete(j);
+                    }
+                }
+            }
+
+            virtualMemory.insert(memVir, bitVir, proc[i]);
+            set.put(i, i);
+        }
+
+        while (!set.isEmpty()) {
+            for (int j : set.keys()) {
+                double t = proc[j].nextAccessTime();
+
+                if ((double)(System.nanoTime() - startTime)/10e+9 < t) {
+                    long p = proc[j].nextAccessPage();
+                    physicalMemory.insert(memTot, bitTot, proc[j], p);
+                }
+
+                if ((double)(System.nanoTime() - startTime)/10e+9 < proc[j].tf) {
+                    virtualMemory.remove(memVir, bitVir, proc[i]);
+                    set.delete(j);
+                }
+            }
+        }
     }
+    
 
     public static void main (String[] args) throws java.io.IOException {
 

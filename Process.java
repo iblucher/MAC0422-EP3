@@ -11,6 +11,7 @@
 public class Process {
     private long PID;
     private long b;
+    private long base, limit;
     private String nome;
     private double t0, tf;
     private Queue<Long> AccessPage;
@@ -22,6 +23,7 @@ public class Process {
         this.nome = nome;
         this.tf = tf;
         this.b = b;
+        this.base = this.limit = -1;
         AccessPage = new Queue<Long>();
         AccessTime = new Queue<Double>();
     }
@@ -63,6 +65,10 @@ public class Process {
 
     public double nextAccessTime() {
         return AccessTime.peek();
+    }
+
+    public double nextAccessPage() {
+        return AccessPage.peek();
     }
 
     public int remainingSize() {
