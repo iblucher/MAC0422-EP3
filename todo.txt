@@ -5,7 +5,7 @@ TO-DO:
 	+ ler arquivo de trace e pegar informações
 	+ criar arquivos que representam as memórias
 	+ criar estrutura pros processos lidos no trace (priority_queue, vector)
-	- bitmap pra cada uma das memórias (bitset)
+	+ bitmap pra cada uma das memórias (bitset)
 	- colocar processos na memória virtual quando bater o t0 respectivo (algoritmo de gerencia)
 	- estrutura X que mantém os processos ativos
 	- percorre e verifica a estrutra X e quando bater o t_i de cada acesso, colocar página p_i

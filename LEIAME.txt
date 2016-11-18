@@ -9,10 +9,11 @@
 *******************************************************************************/
 
 - Dependências: 
-	Como estamos usando bibliotecas padrão do livro "Introduction to Programming
-	in Java" do Robert Sedgewick (link: http://introcs.cs.princeton.edu/java/stdlib/)
-	é necessário ter o arquivo stdlib.jar que enviamos junto ao .tar.gz do EP no
-	mesmo diretório que o código-fonte. 
+	Como estamos usando bibliotecas dos livros "Introduction to Programming in 
+	Java" (link: http://introcs.cs.princeton.edu/java/) e "Algorithms, 
+	4th Edition" (link: http://algs4.cs.princeton.edu/) de autoria do Robert 
+	Sedgewick e do Kevin Wayne é necessário ter o arquivo lib.jar que enviamos
+	junto ao .tar.gz do EP3 no mesmo diretório que o código-fonte. 
 
 - Compilação:
 	Para compilar apenas digite no terminal o comando "make".

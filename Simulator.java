@@ -12,12 +12,14 @@ import java.io.*;
 import java.util.Scanner;
 
 public class Simulator {
+
     static Simulator sim; // objeto da classe Simulator
     int total, virtual, s, p; // valores dados na primeira linha do trace
     static BinaryOut outTot, outVir; // arquivos binários
     long[] memTot, memVir; // vetores que representam o conteúdos dos arquivos
-    Process[] plist;
-    int num_process;
+    BitSet bitTot, bitVir; // bitmap das memórias
+    Process[] plist; // lista de processos
+    int num_process; // número de processos
 
     public void createDirectory () {
         File dir = new File ("/tmp/");
@@ -77,6 +79,11 @@ public class Simulator {
     public void initMemory () {
         memTot = new long[total/s];
         memVir = new long[virtual/p];
+        bitTot = new BitSet(total/s);
+        bitVir = new BitSet(virtual/p);
+
+        bitTot.clear();
+        bitVir.clear();
 
         for (int i = 0; i < total/s; i++) {
             memTot[i] = -1;
@@ -92,6 +99,10 @@ public class Simulator {
         outVir.flush();
     }
 
+    public void simulate (int m, int r, int interval) {
+        
+    }
+
     public static void main (String[] args) throws java.io.IOException {
 
         sim = new Simulator();
@@ -99,8 +110,8 @@ public class Simulator {
 
         String line;
         String[] command = null;
-        int espaco;
-        int substitui;
+        int management;
+        int replacement;
 
         sim.createDirectory();
 
@@ -119,11 +130,12 @@ public class Simulator {
             else if (command[0].equals("carrega"))
                 sim.loadFile (command[1]);
             else if (command[0].equals("espaco"))
-                espaco = Integer.parseInt(command[1]);
+                management = Integer.parseInt(command[1]);
             else if (command[0].equals("substitui"))
-                substitui = Integer.parseInt(command[1]);
-            //else if (command[0].equals("executa"))
-                // execução 
+                replacement = Integer.parseInt(command[1]);
+            else if (command[0].equals("executa"))
+                sim.simulate (management, replacement, Integer.parseInt(command[1]));
+                 
         }
     }
 }
