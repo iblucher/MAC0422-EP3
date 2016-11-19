@@ -10,15 +10,13 @@
 
 import java.io.*;
 import java.util.Scanner;
-import java.util.BitSet;
 
 public class Simulator {
-
     static Simulator sim; // objeto da classe Simulator
-    int total, virtual, s, p; // valores dados na primeira linha do trace
+    static int total, virtual, s, p; // valores dados na primeira linha do trace
     static BinaryOut outTot, outVir; // arquivos binários
     long[] memTot, memVir; // vetores que representam o conteúdos dos arquivos
-    BitSet bitTot, bitVir; // bitmap das memórias
+    boolean[] bitTot, bitVir; // bitmap das memórias
     Process[] plist; // lista de processos
     int num_process; // número de processos
 
@@ -41,7 +39,7 @@ public class Simulator {
         s = in.readInt();
         p = in.readInt();
 
-        StdOut.printf ("%d %d %d %d\n", total, virtual, s, p);
+        StdOut.println(total + " " + virtual + " " + s + " " + p);
 
         sim.initMemory();
 
@@ -62,13 +60,13 @@ public class Simulator {
             double t0 = in.readDouble();
             String nome = in.readString();
             double tf = in.readDouble();
-            long b = in.readLong();
+            int b = in.readInt();
 
             plist[i] = new Process(i, t0, nome, tf, b);
             String line = in.readLine();
             Scanner s = new Scanner(line);
-            while (s.hasNextLong()) {
-                long p = s.nextLong();
+            while (s.hasNextInt()) {
+                int p = s.nextInt();
                 double t = s.nextDouble();
                 plist[i].newAccess(p, t);
             }
@@ -80,11 +78,11 @@ public class Simulator {
     public void initMemory () {
         memTot = new long[total/s];
         memVir = new long[virtual/p];
-        bitTot = new BitSet(total/s);
-        bitVir = new BitSet(virtual/p);
+        bitTot = new boolean[total/s];
+        bitVir = new boolean[virtual/p];
 
-        bitTot.clear();
-        bitVir.clear();
+        StdOut.println(bitTot.length);
+        StdOut.println(bitVir.length);
 
         for (int i = 0; i < total/s; i++) {
             memTot[i] = -1;
@@ -101,43 +99,43 @@ public class Simulator {
     }
 
     public void simulate (int m, int r, int interval) {
-        RedBlackBST<Integer> set = new RedBlackBST<Integer>();
-        SpaceManagement virtualMemory = new SpaceManagement(m);
+        RedBlackBST<Integer, Integer> set = new RedBlackBST<Integer, Integer>();
+        SpaceManagement virtualMemory = new SpaceManagement(m, virtual, p);
         PageReplacement physicalMemory = new PageReplacement(r);
         long startTime = System.nanoTime();
         
         for (int i = 0; i < num_process; i++) {
             while ((double)(System.nanoTime() - startTime)/10e+9 < plist[i].t0()) {
                 for (int j : set.keys()) {
-                    double t = proc[j].nextAccessTime();
+                    double t = plist[j].nextAccessTime();
 
                     if ((double)(System.nanoTime() - startTime)/10e+9 < t) {
-                        long p = proc[j].nextAccessPage();
-                        physicalMemory.insert(memTot, bitTot, proc[j], p);
+                        int p = plist[j].nextAccessPage();
+                        physicalMemory.insert(memTot, bitTot, plist[j], p);
                     }
 
-                    if ((double)(System.nanoTime() - startTime)/10e+9 < proc[j].tf) {
-                        virtualMemory.remove(memVir, bitVir, proc[i]);
+                    if ((double)(System.nanoTime() - startTime)/10e+9 < plist[j].tf()) {
+                        virtualMemory.remove(memVir, bitVir, plist[j]);
                         set.delete(j);
                     }
                 }
             }
 
-            virtualMemory.insert(memVir, bitVir, proc[i]);
+            virtualMemory.insert(memVir, bitVir, plist[i]);
             set.put(i, i);
         }
 
         while (!set.isEmpty()) {
             for (int j : set.keys()) {
-                double t = proc[j].nextAccessTime();
+                double t = plist[j].nextAccessTime();
 
                 if ((double)(System.nanoTime() - startTime)/10e+9 < t) {
-                    long p = proc[j].nextAccessPage();
-                    physicalMemory.insert(memTot, bitTot, proc[j], p);
+                    int p = plist[j].nextAccessPage();
+                    physicalMemory.insert(memTot, bitTot, plist[j], p);
                 }
 
-                if ((double)(System.nanoTime() - startTime)/10e+9 < proc[j].tf) {
-                    virtualMemory.remove(memVir, bitVir, proc[i]);
+                if ((double)(System.nanoTime() - startTime)/10e+9 < plist[j].tf()) {
+                    virtualMemory.remove(memVir, bitVir, plist[j]);
                     set.delete(j);
                 }
             }
@@ -152,8 +150,7 @@ public class Simulator {
 
         String line;
         String[] command = null;
-        int management;
-        int replacement;
+        int m = 0, r = 0;
 
         sim.createDirectory();
 
@@ -172,11 +169,11 @@ public class Simulator {
             else if (command[0].equals("carrega"))
                 sim.loadFile (command[1]);
             else if (command[0].equals("espaco"))
-                management = Integer.parseInt(command[1]);
+                m = Integer.parseInt(command[1]);
             else if (command[0].equals("substitui"))
-                replacement = Integer.parseInt(command[1]);
+                r = Integer.parseInt(command[1]);
             else if (command[0].equals("executa"))
-                sim.simulate (management, replacement, Integer.parseInt(command[1]));
+                sim.simulate (m, r, Integer.parseInt(command[1]));
                  
         }
     }

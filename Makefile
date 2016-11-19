@@ -8,6 +8,8 @@ JC = javac
 CLASSES = \
 	  Simulator.java \
       Process.java \
+      SpaceManagement.java \
+      PageReplacement.java \
 
 default: classes
 

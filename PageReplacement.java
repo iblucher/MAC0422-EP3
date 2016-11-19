@@ -15,7 +15,7 @@ public class PageReplacement {
 		this.method = method;
 	}
 
-	public void insert(long[] memory, BitSet bitmap, Process proc, long p) {
+	public void insert(long[] memory, boolean[] bitmap, Process proc, long p) {
 		switch (method) {
 			case 1:
 				optimal(memory, bitmap, proc, p);
@@ -32,15 +32,15 @@ public class PageReplacement {
 		}
 	}
 
-	private void optimal(long[] memory, BitSet bitmap, Process proc, long p) {
+	private void optimal(long[] memory, boolean[] bitmap, Process proc, long p) {
 	}
 
-	private void secondChance(long[] memory, BitSet bitmap, Process proc, long p) {
+	private void secondChance(long[] memory, boolean[] bitmap, Process proc, long p) {
 	}
 
-	private void clock(long[] memory, BitSet bitmap, Process proc, long p) {
+	private void clock(long[] memory, boolean[] bitmap, Process proc, long p) {
 	}
 
-	private void leastRecentlyUsed(long[] memory, BitSet bitmap, Process proc, long p) {
+	private void leastRecentlyUsed(long[] memory, boolean[] bitmap, Process proc, long p) {
 	}
 }

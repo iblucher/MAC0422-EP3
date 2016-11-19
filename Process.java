@@ -10,21 +10,21 @@
 
 public class Process {
     private long PID;
-    private long b;
-    private long base, limit;
+    private int b;
+    private int base, limit;
     private String nome;
     private double t0, tf;
-    private Queue<Long> AccessPage;
+    private Queue<Integer> AccessPage;
     private Queue<Double> AccessTime;
 
-    public Process(long PID, double t0, String nome, double tf, long b) {
+    public Process(long PID, double t0, String nome, double tf, int b) {
         this.PID = PID;
         this.t0 = t0;
         this.nome = nome;
         this.tf = tf;
         this.b = b;
         this.base = this.limit = -1;
-        AccessPage = new Queue<Long>();
+        AccessPage = new Queue<Integer>();
         AccessTime = new Queue<Double>();
     }
 
@@ -32,7 +32,7 @@ public class Process {
         return PID;
     }
 
-    public long b() {
+    public int b() {
         return b;
     }
 
@@ -48,12 +48,20 @@ public class Process {
         return tf;
     }
 
-    public void print() {
-        StdOut.println(AccessPage.toString());
-        StdOut.println(AccessTime.toString());
+    public int base() {
+        return base;
     }
 
-    public void newAccess(long p, double t) {
+    public int limit() {
+        return limit;
+    }
+
+    public void allocated(int base, int limit) {
+        this.base = base;
+        this.limit = limit;
+    }
+
+    public void newAccess(int p, double t) {
         AccessPage.enqueue(p);
         AccessTime.enqueue(t);
     }
@@ -67,7 +75,7 @@ public class Process {
         return AccessTime.peek();
     }
 
-    public double nextAccessPage() {
+    public int nextAccessPage() {
         return AccessPage.peek();
     }
 
