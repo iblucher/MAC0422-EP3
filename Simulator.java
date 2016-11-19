@@ -15,7 +15,8 @@ public class Simulator {
     static Simulator sim; // objeto da classe Simulator
     static int total, virtual, s, p; // valores dados na primeira linha do trace
     static BinaryOut outTot, outVir; // arquivos binários
-    long[] memTot, memVir; // vetores que representam o conteúdos dos arquivos
+    long[] memVir; // vetores que representam o conteúdos dos arquivo
+    long[][] memTot;
     boolean[] bitTot, bitVir; // bitmap das memórias
     Process[] plist; // lista de processos
     int num_process; // número de processos
@@ -76,21 +77,24 @@ public class Simulator {
     }
 
     public void initMemory () {
-        memTot = new long[total/s];
+        memTot = new long[total/s][2];
         memVir = new long[virtual/p];
         bitTot = new boolean[total/s];
         bitVir = new boolean[virtual/p];
 
-        StdOut.println(bitTot.length);
-        StdOut.println(bitVir.length);
-
         for (int i = 0; i < total/s; i++) {
-            memTot[i] = -1;
-            outTot.write(-1);
+            memTot[i][0] = memTot[i][1] =  -1;
         }
 
         for (int i = 0; i < virtual/p; i++) {
             memVir[i] = -1;
+        }
+
+        for (int i = 0; i < total; i++) {
+            outTot.write(-1);
+        }
+
+        for (int i = 0; i < virtual; i++) {
             outVir.write(-1);
         }
 
@@ -101,7 +105,8 @@ public class Simulator {
     public void simulate (int m, int r, int interval) {
         RedBlackBST<Integer, Integer> set = new RedBlackBST<Integer, Integer>();
         SpaceManagement virtualMemory = new SpaceManagement(m, virtual, p);
-        PageReplacement physicalMemory = new PageReplacement(r);
+        PageReplacement physicalMemory = new PageReplacement(r, total, s, p, plist, num_process);
+        PageTable table = new PageTable(virtual/p);
         long startTime = System.nanoTime();
         
         for (int i = 0; i < num_process; i++) {
@@ -109,9 +114,9 @@ public class Simulator {
                 for (int j : set.keys()) {
                     double t = plist[j].nextAccessTime();
 
-                    if ((double)(System.nanoTime() - startTime)/10e+9 < t) {
+                    if (t != -1 && (double)(System.nanoTime() - startTime)/10e+9 < t) {
                         int p = plist[j].nextAccessPage();
-                        physicalMemory.insert(memTot, bitTot, plist[j], p);
+                        physicalMemory.insert(memTot, bitTot, plist[j], p, table);
                     }
 
                     if ((double)(System.nanoTime() - startTime)/10e+9 < plist[j].tf()) {
@@ -131,7 +136,7 @@ public class Simulator {
 
                 if ((double)(System.nanoTime() - startTime)/10e+9 < t) {
                     int p = plist[j].nextAccessPage();
-                    physicalMemory.insert(memTot, bitTot, plist[j], p);
+                    physicalMemory.insert(memTot, bitTot, plist[j], p, table);
                 }
 
                 if ((double)(System.nanoTime() - startTime)/10e+9 < plist[j].tf()) {

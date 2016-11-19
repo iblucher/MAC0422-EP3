@@ -13,7 +13,7 @@ TO-DO:
 	+ criar estrutura pros processos lidos no trace (priority_queue, vector)
 	+ bitmap pra cada uma das memórias (bitset)
 	+ estrutura X que mantém os processos ativos (red black bst)
-	- colocar processos na memória virtual quando bater o t0 respectivo (algoritmo de gerencia)
+	+ colocar processos na memória virtual quando bater o t0 respectivo (algoritmo de gerencia)
 	- percorre e verifica a estrutra X e quando bater o t_i de cada acesso, colocar página p_i
 	na memória física:
 		- verificar facilmente se a página está na memória física (tabelão de páginas)
@@ -21,11 +21,11 @@ TO-DO:
 	- quando bater todos os tfs, o algoritmo termina e então fim da simulação!
 	- talvez utilizar uma thread para imprimir
 
-- Implementar algoritmos de gerência de espaço livre:
-	- First Fit
-	- Next Fit
-	- Best Fit
-	- Worst Fit
++ Implementar algoritmos de gerência de espaço livre:
+	+ First Fit
+	+ Next Fit
+	+ Best Fit
+	+ Worst Fit
 
 - Implementar algoritmos de susbstituição de páginas
 	- Optimal (com lista de rótulos)

@@ -10,6 +10,8 @@ CLASSES = \
       Process.java \
       SpaceManagement.java \
       PageReplacement.java \
+      PageTable.java \
+      OptimalList.java \
 
 default: classes
 

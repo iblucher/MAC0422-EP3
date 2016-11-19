@@ -38,7 +38,11 @@ public class SpaceManagement {
 	}
 
 	public void remove(long[] memory, boolean[] bitmap, Process proc) {
-
+		for (int j = proc.base(); j < proc.limit(); j++) {
+			memory[j] = -1;
+			bitmap[j] = false;
+		}
+		proc.freed();
 	}
 
 	private void firstFit(long[] memory, boolean[] bitmap, Process proc) {

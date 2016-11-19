@@ -61,6 +61,11 @@ public class Process {
         this.limit = limit;
     }
 
+    public void freed() {
+        this.base = -1;
+        this.limit = -1;
+    }
+
     public void newAccess(int p, double t) {
         AccessPage.enqueue(p);
         AccessTime.enqueue(t);
@@ -72,11 +77,43 @@ public class Process {
     }
 
     public double nextAccessTime() {
+        if (AccessTime.isEmpty()) return -1;
         return AccessTime.peek();
     }
 
     public int nextAccessPage() {
         return AccessPage.peek();
+    }
+
+    public RedBlackBST<Integer, Queue<Double>> labelTree() {
+        int[] pageArray = new int[AccessPage.size()];
+        double[] timeArray = new double[AccessTime.size()];
+
+        int i = 0;
+        for (int p : AccessPage) {
+            pageArray[i++] = p;
+        }
+
+        i = 0;
+        for (double t : AccessTime) {
+            timeArray[i++] = t;
+        }
+
+        RedBlackBST<Integer, Queue<Double>> tree = new RedBlackBST<Integer, Queue<Double>>();
+
+        for (i = 0; i < AccessPage.size(); i++) {
+            Queue<Double> q = tree.get(pageArray[i]);
+            if (q != null) {
+                q.enqueue(timeArray[i]);
+                tree.put(pageArray[i], q);
+            } else {
+                q = new Queue<Double>();
+                q.enqueue(timeArray[i]);
+                tree.put(pageArray[i], q);
+            }
+        }
+
+        return tree;
     }
 
     public int remainingSize() {
