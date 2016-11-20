@@ -72,6 +72,7 @@ public class PageReplacement {
 				bitmap[i] = true;
 			}
 			table.include(proc.base() + page, num_pages * p/s);
+            olist.remove(proc.PID(), page);
 			num_pages++;
 			return;
 		}
@@ -92,7 +93,6 @@ public class PageReplacement {
 			}
 		}
 
-		olist.remove(memory[address][0], (int)memory[address][1]);
 		table.remove(address);
         for (int i = address; i < address + p/s; i++) {
 			memory[i][0] = proc.PID();
@@ -100,6 +100,7 @@ public class PageReplacement {
 			bitmap[i] = true;
 		}
 		table.include(proc.base() + page, address);
+        olist.remove(proc.PID(), page);
 	}
 
 	private void secondChance(long[][] memory, boolean[] bitmap, Process proc, int page, PageTable table) {
