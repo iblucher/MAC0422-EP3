@@ -13,6 +13,7 @@ CLASSES = \
       PageTable.java \
       OptimalList.java \
       Clock.java \
+      LRU.java \
 
 default: classes
 

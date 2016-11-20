@@ -11,12 +11,15 @@
 public class SpaceManagement {
 	private final int method;
 	private final int virtual, p;
-	private int pointer = 0;
+	private int pointer;
+    private long time_spent;
 
 	public SpaceManagement(int method, int virtual, int p) {
 		this.method = method;
 		this.virtual = virtual;
 		this.p = p;
+        this.pointer = 0;
+        this.time_spent = 0;
 	}
 
 	// função que insere na memória
@@ -48,12 +51,17 @@ public class SpaceManagement {
 	private void firstFit(long[] memory, boolean[] bitmap, Process proc) {
 		int nbits = bitmap.length;
 
+        long startTime = System.currentTimeMillis();
+
 		for (int i = 0; i < nbits; i++) {
 			int base = i;
 			
-			while (!bitmap[i++]);
+			while (i < nbits && !bitmap[i++]);
 
 			if (proc.b() <= (i - base) * p) {
+
+                time_spent += System.currentTimeMillis() - startTime;
+
 				int size = (int) Math.ceil((double)proc.b()/p);
 				proc.allocated(base, base + size);
 
@@ -71,12 +79,17 @@ public class SpaceManagement {
 		int nbits = bitmap.length;
 		boolean done = false;
 
+        long startTime = System.currentTimeMillis();
+
 		for (int i = pointer; i < nbits; i++) {
 			int base = i;
 			
-			while (!bitmap[i++]);
+			while (i < nbits && !bitmap[i++]);
 
 			if (proc.b() <= (i - base) * p) {
+
+                time_spent += System.currentTimeMillis() - startTime;
+
 				int size = (int) Math.ceil((double)proc.b()/p);
 				proc.allocated(base, base + size);
 
@@ -96,9 +109,12 @@ public class SpaceManagement {
 		for (int i = 0; i < pointer; i++) {
 			int base = i;
 			
-			while (!bitmap[i++]);
+			while (i < pointer && !bitmap[i++]);
 
 			if (proc.b() <= (i - base) * p) {
+
+                time_spent += System.currentTimeMillis() - startTime;
+
 				int size = (int) Math.ceil((double)proc.b()/p);
 				proc.allocated(base, base + size);
 
@@ -118,16 +134,20 @@ public class SpaceManagement {
 		int min = nbits;
 		int mindex = -1;
 
+        long startTime = System.currentTimeMillis();
+
 		for (int i = 0; i < nbits; i++) {
 			int base = i;
 			
-			while (!bitmap[i++]);
+			while (i < nbits && !bitmap[i++]);
 
 			if (proc.b() <= (i - base) * p && (i - base) * p < min) {
 				mindex = base;
 				min = (i - mindex) * p;
 			}
 		}
+
+        time_spent += System.currentTimeMillis() - startTime;
 
 		int size = (int) Math.ceil((double)proc.b()/p);
 		proc.allocated(mindex, mindex + size);
@@ -143,16 +163,20 @@ public class SpaceManagement {
 		int max = 0;
 		int mindex = -1;
 
+        long startTime = System.currentTimeMillis();
+
 		for (int i = 0; i < nbits; i++) {
 			int base = i;
 			
-			while (!bitmap[i++]);
+			while (i < nbits && !bitmap[i++]);
 
 			if (proc.b() <= (i - base) * p && max < (i - base) * p) {
 				mindex = base;
 				max = (i - mindex) * p;
 			}
 		}
+
+        time_spent += System.currentTimeMillis() - startTime;
 
 		int size = (int) Math.ceil((double)proc.b()/p);
 		proc.allocated(mindex, mindex + size);
@@ -162,4 +186,8 @@ public class SpaceManagement {
 			bitmap[j] = true;
 		}
 	}
+
+    public double time_spent() {
+        return this.time_spent/1000;
+    }
 }

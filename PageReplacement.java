@@ -11,7 +11,8 @@
 public class PageReplacement {
 	private final int method;
 	private final int total, virtual, s, p;
-	int num_pages = 0;
+	private int num_pages;
+    private long page_faults;
 
 	private OptimalList olist;
     private Queue<Integer> fifo;
@@ -24,6 +25,8 @@ public class PageReplacement {
         this.virtual = virtual;
 		this.s = s;
 		this.p = p;
+        this.num_pages = 0;
+        this.page_faults = 0;
 
         switch (method) {
 			case 1:
@@ -43,6 +46,7 @@ public class PageReplacement {
 
 	public void insert(long[][] memory, boolean[] bitmap, Process proc, int page, PageTable table) {
         if (table.query(proc.base() + page) != -1) return;
+        page_faults++;
 
 		switch (method) {
 			case 1:
@@ -199,5 +203,9 @@ public class PageReplacement {
 
     public void LRUupdate(PageTable table) {
         lru.update(table);
+    }
+
+    public long page_faults() {
+        return this.page_faults;
     }
 }

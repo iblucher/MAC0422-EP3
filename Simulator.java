@@ -39,8 +39,6 @@ public class Simulator {
         s = in.readInt();
         p = in.readInt();
 
-        StdOut.println(total + " " + virtual + " " + s + " " + p);
-
         sim.initMemory();
 
         num_process = 2;
@@ -126,34 +124,26 @@ public class Simulator {
 
         StdOut.println("Memória física:");
         for (int i = 0; i < total; i++) {
+            int b = (bitTot[i/s]) ? 1 : 0;
             if (memTot[i/s][0] != -1) {
-                StdOut.println(Integer.toBinaryString((int)memTot[i/s][0]) + "    " + bitTot[i/s]);
+                String bits = String.format("%32s", Integer.toBinaryString((int)memTot[i/s][0])).replace(' ', '0');
+                StdOut.println(bits + "    " + b);
             } else {
-                StdOut.println(none + "    " + bitTot[i/s]);
+                StdOut.println(none + "    " + b);
             }
         }
         
         StdOut.println("Memória virtual:");
         for (int i = 0; i < virtual; i++) {
+            int b = (bitVir[i/p]) ? 1 : 0;
             if (memVir[i/p] != -1) {
-                StdOut.println(Integer.toBinaryString((int)memVir[i/p]) + "    " + bitVir[i/p]);
+                String bits = String.format("%32s", Integer.toBinaryString((int)memVir[i/p])).replace(' ', '0');
+                StdOut.println(bits + "    " + b);
             } else {
-                StdOut.println(none + "    " + bitVir[i/s]);
+                StdOut.println(none + "    " + b);
             }
         }
         StdOut.println();
-    }
-
-    private static class printTask extends TimerTask {
-        Simulator sim;
-
-        public printTask(Simulator sim) {
-            this.sim = sim;
-        }
-
-        public void run() {
-            sim.printMemory();
-        }
     }
 
     public void simulate (int m, int r, int interval) {
@@ -161,30 +151,50 @@ public class Simulator {
         SpaceManagement virtualMemory = new SpaceManagement(m, virtual, p);
         PageReplacement physicalMemory = new PageReplacement(r, total, virtual, s, p, plist, num_process);
         PageTable table = new PageTable(virtual/p);
-        long startTime = System.nanoTime();
-
-        Timer printTimer = new Timer();
-        printTimer.schedule(new printTask(this), 0, interval * 1000);
+        long startTime = System.currentTimeMillis();
+        
+        long lastPrint = System.currentTimeMillis();
+        printMemory();
+        long lastBitUpdate = System.currentTimeMillis();
+        table.update();
+        long lastLruUpdate;
+        if (m == 4) {
+            lastLruUpdate = System.currentTimeMillis();
+            physicalMemory.LRUupdate(table);
+        }
 
         for (int i = 0; i < num_process; i++) {
-            while ((double)(System.nanoTime() - startTime)/10e+9 < plist[i].t0()) {
+            while ((double)(System.currentTimeMillis() - startTime)/1000 < plist[i].t0()) {
                 for (int j : set.keys()) {
+                    if ((double)(System.currentTimeMillis() - lastPrint)/1000 > interval) {
+                        lastPrint = System.currentTimeMillis();
+                        printMemory();
+                    }
+                    if ((double)(System.currentTimeMillis() - lastPrint)/1000 > quantum) {
+                        lastBitUpdate = System.currentTimeMillis();
+                        table.update();
+                    }
+                    if (m == 4 && (double)(System.currentTimeMillis() - lastPrint)/1000 > quantum/8) {
+                        lastLruUpdate = System.currentTimeMillis();
+                        physicalMemory.LRUupdate(table);
+                    }
+
                     double t = plist[j].nextAccessTime();
 
-                    if (t != -1 && (double)(System.nanoTime() - startTime)/10e+9 < t) {
+                    if (t != -1 && (double)(System.currentTimeMillis() - startTime)/1000 > t) {
                         int p = plist[j].nextAccessPage();
                         physicalMemory.insert(memTot, bitTot, plist[j], p, table);
                         updateMemory();
                     }
 
-                    if ((double)(System.nanoTime() - startTime)/10e+9 < plist[j].tf()) {
+                    if ((double)(System.currentTimeMillis() - startTime)/1000 > plist[j].tf()) {
                         virtualMemory.remove(memVir, bitVir, plist[j]);
                         set.delete(j);
                         updateMemory();
                     }
                 }
             }
-
+            
             virtualMemory.insert(memVir, bitVir, plist[i]);
             set.put(i, i);
             updateMemory();
@@ -192,21 +202,31 @@ public class Simulator {
 
         while (!set.isEmpty()) {
             for (int j : set.keys()) {
+                if ((double)(System.currentTimeMillis() - lastPrint)/1000 > interval) {
+                    lastPrint = System.currentTimeMillis();
+                    printMemory();
+                }
+
+
+                
                 double t = plist[j].nextAccessTime();
 
-                if ((double)(System.nanoTime() - startTime)/10e+9 < t) {
+                if (t != -1 && (double)(System.currentTimeMillis() - startTime)/1000 > t) {
                     int p = plist[j].nextAccessPage();
                     physicalMemory.insert(memTot, bitTot, plist[j], p, table);
                     updateMemory();
                 }
 
-                if ((double)(System.nanoTime() - startTime)/10e+9 < plist[j].tf()) {
+                if ((double)(System.currentTimeMillis() - startTime)/1000 > plist[j].tf()) {
                     virtualMemory.remove(memVir, bitVir, plist[j]);
                     set.delete(j);
                     updateMemory();
                 }
             }
         }
+
+        StdOut.println("Tempo total de busca por espaço livre: " + virtualMemory.time_spent() + "s");
+        StdOut.println("Número de page faults: " + physicalMemory.page_faults());
     }
 
     public static void main (String[] args) throws java.io.IOException {
