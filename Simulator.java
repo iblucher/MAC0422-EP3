@@ -10,12 +10,14 @@
 
 import java.io.*;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Simulator {
     static Simulator sim; // objeto da classe Simulator
     static int total, virtual, s, p; // valores dados na primeira linha do trace
     static BinaryOut outTot, outVir; // arquivos binários
-    static double quantum;
+    static double quantum = 8.0;
 
     long[] memVir; // vetores que representam o conteúdos dos arquivo
     long[][] memTot;
@@ -108,15 +110,50 @@ public class Simulator {
         outVir = new BinaryOut("/tmp/ep3.vir");
 
         for (int i = 0; i < total; i++) {
-            outTot.write(memTot[i/s][0]);
+            outTot.write((int)memTot[i/s][0]);
         }
 
         for (int i = 0; i < virtual; i++) {
-            outVir.write(memVir[i/p]);
+            outVir.write((int)memVir[i/p]);
         }
 
         outTot.close();
         outVir.close();
+    }
+
+    public void printMemory () {
+        String none = "--------------------------------";
+
+        StdOut.println("Memória física:");
+        for (int i = 0; i < total; i++) {
+            if (memTot[i/s][0] != -1) {
+                StdOut.println(Integer.toBinaryString((int)memTot[i/s][0]) + "    " + bitTot[i/s]);
+            } else {
+                StdOut.println(none + "    " + bitTot[i/s]);
+            }
+        }
+        
+        StdOut.println("Memória virtual:");
+        for (int i = 0; i < virtual; i++) {
+            if (memVir[i/p] != -1) {
+                StdOut.println(Integer.toBinaryString((int)memVir[i/p]) + "    " + bitVir[i/p]);
+            } else {
+                StdOut.println(none + "    " + bitVir[i/s]);
+            }
+        }
+        StdOut.println();
+    }
+
+    private static class printTask extends TimerTask {
+        Simulator sim;
+
+        public printTask(Simulator sim) {
+            this.sim = sim;
+        }
+
+        public void run() {
+            sim.printMemory();
+        }
     }
 
     public void simulate (int m, int r, int interval) {
@@ -125,7 +162,10 @@ public class Simulator {
         PageReplacement physicalMemory = new PageReplacement(r, total, virtual, s, p, plist, num_process);
         PageTable table = new PageTable(virtual/p);
         long startTime = System.nanoTime();
-        
+
+        Timer printTimer = new Timer();
+        printTimer.schedule(new printTask(this), 0, interval * 1000);
+
         for (int i = 0; i < num_process; i++) {
             while ((double)(System.nanoTime() - startTime)/10e+9 < plist[i].t0()) {
                 for (int j : set.keys()) {
@@ -134,17 +174,20 @@ public class Simulator {
                     if (t != -1 && (double)(System.nanoTime() - startTime)/10e+9 < t) {
                         int p = plist[j].nextAccessPage();
                         physicalMemory.insert(memTot, bitTot, plist[j], p, table);
+                        updateMemory();
                     }
 
                     if ((double)(System.nanoTime() - startTime)/10e+9 < plist[j].tf()) {
                         virtualMemory.remove(memVir, bitVir, plist[j]);
                         set.delete(j);
+                        updateMemory();
                     }
                 }
             }
 
             virtualMemory.insert(memVir, bitVir, plist[i]);
             set.put(i, i);
+            updateMemory();
         }
 
         while (!set.isEmpty()) {
@@ -154,16 +197,17 @@ public class Simulator {
                 if ((double)(System.nanoTime() - startTime)/10e+9 < t) {
                     int p = plist[j].nextAccessPage();
                     physicalMemory.insert(memTot, bitTot, plist[j], p, table);
+                    updateMemory();
                 }
 
                 if ((double)(System.nanoTime() - startTime)/10e+9 < plist[j].tf()) {
                     virtualMemory.remove(memVir, bitVir, plist[j]);
                     set.delete(j);
+                    updateMemory();
                 }
             }
         }
     }
-    
 
     public static void main (String[] args) throws java.io.IOException {
         sim = new Simulator();

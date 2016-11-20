@@ -196,4 +196,8 @@ public class PageReplacement {
 		}
 		table.include(proc.base() + page, address);
 	}
+
+    public void LRUupdate(PageTable table) {
+        lru.update(table);
+    }
 }
