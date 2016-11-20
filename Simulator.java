@@ -229,8 +229,10 @@ public class Simulator {
             }
         }
 
+        StdOut.println("Tempo total de execução: " + (double)(System.currentTimeMillis() - startTime)/1000 + "s");
         StdOut.println("Tempo total de busca por espaço livre: " + virtualMemory.time_spent() + "s");
         StdOut.println("Número de page faults: " + physicalMemory.page_faults());
+        
     }
 
     public static void main (String[] args) throws java.io.IOException {
