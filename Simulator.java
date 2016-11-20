@@ -15,6 +15,8 @@ public class Simulator {
     static Simulator sim; // objeto da classe Simulator
     static int total, virtual, s, p; // valores dados na primeira linha do trace
     static BinaryOut outTot, outVir; // arquivos binários
+    static double quantum;
+
     long[] memVir; // vetores que representam o conteúdos dos arquivo
     long[][] memTot;
     boolean[] bitTot, bitVir; // bitmap das memórias
@@ -26,11 +28,6 @@ public class Simulator {
         if (!dir.exists()) {
             dir.mkdir();
         }
-
-        // criar arquivos binários
-        outTot = new BinaryOut("/tmp/ep3.mem");
-        outVir = new BinaryOut("/tmp/ep3.vir");
-
     }
 
     public void loadFile (String name) {
@@ -77,6 +74,10 @@ public class Simulator {
     }
 
     public void initMemory () {
+        // criar arquivos binários
+        outTot = new BinaryOut("/tmp/ep3.mem");
+        outVir = new BinaryOut("/tmp/ep3.vir");
+
         memTot = new long[total/s][2];
         memVir = new long[virtual/p];
         bitTot = new boolean[total/s];
@@ -98,8 +99,24 @@ public class Simulator {
             outVir.write(-1);
         }
 
-        outTot.flush();
-        outVir.flush();
+        outTot.close();
+        outVir.close();
+    }
+
+    public void updateMemory () {
+        outTot = new BinaryOut("/tmp/ep3.mem");
+        outVir = new BinaryOut("/tmp/ep3.vir");
+
+        for (int i = 0; i < total; i++) {
+            outTot.write(memTot[i/s][0]);
+        }
+
+        for (int i = 0; i < virtual; i++) {
+            outVir.write(memVir[i/p]);
+        }
+
+        outTot.close();
+        outVir.close();
     }
 
     public void simulate (int m, int r, int interval) {
@@ -149,7 +166,6 @@ public class Simulator {
     
 
     public static void main (String[] args) throws java.io.IOException {
-
         sim = new Simulator();
         In in = new In();
 

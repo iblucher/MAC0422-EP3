@@ -52,4 +52,8 @@ public class PageTable {
     public void clearBitR (int virtualAddress) {
     	bitR[virtualAddress] = false;
     }
+
+    public void update () {
+        for (int i = 0; i < size; i++) clearBitR(i);
+    }
 }
