@@ -85,7 +85,7 @@ public class PageReplacement {
             if (memory[i][0] != -1) {
 			    double label = olist.label(memory[i][0], (int)memory[i][1]);
 
-                if (label == -1) {
+                if (label < 0) {
 				    address = i;
                     break;
 			    } else if (max < label) {
