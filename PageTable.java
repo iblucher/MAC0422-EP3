@@ -28,6 +28,10 @@ public class PageTable {
     	fillBitR(virtualAddress);
     }
 
+    public int query (int virtualAddress) {
+        return address[virtualAddress];
+    }
+
     public void remove (int physicalAddress) {
     	int virtualAddress;
     	for (virtualAddress = 0; virtualAddress < size; virtualAddress++) {
@@ -35,6 +39,10 @@ public class PageTable {
     	}
     	address[virtualAddress] = -1;
     	clearBitR(virtualAddress);
+    }
+
+    public boolean bitR (int virtualAddress) {
+    	return bitR[virtualAddress];
     }
 
     public void fillBitR (int virtualAddress) {
