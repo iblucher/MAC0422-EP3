@@ -12,6 +12,7 @@ CLASSES = \
       PageReplacement.java \
       PageTable.java \
       OptimalList.java \
+      Clock.java \
 
 default: classes
 
