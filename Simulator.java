@@ -105,7 +105,7 @@ public class Simulator {
     public void simulate (int m, int r, int interval) {
         RedBlackBST<Integer, Integer> set = new RedBlackBST<Integer, Integer>();
         SpaceManagement virtualMemory = new SpaceManagement(m, virtual, p);
-        PageReplacement physicalMemory = new PageReplacement(r, total, s, p, plist, num_process);
+        PageReplacement physicalMemory = new PageReplacement(r, total, virtual, s, p, plist, num_process);
         PageTable table = new PageTable(virtual/p);
         long startTime = System.nanoTime();
         
