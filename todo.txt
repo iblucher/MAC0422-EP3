@@ -26,50 +26,10 @@ TO-DO:
 	+ Clock
 	+ LRU (quarta versão feat. aging)
 
-- Testes
-	- Para algoritmos de gerência de espaço: medir tempo necessário para encontrar um espaço livre
-	- Para algoritmos de substituição de páginas: medir quantidade de page faults 
++ Testes
+	+ Para algoritmos de gerência de espaço: medir tempo necessário para encontrar um espaço livre
+	+ Para algoritmos de substituição de páginas: medir quantidade de page faults 
 
 
 * QUOTE:
 	Não é necessário simular o tempo real. Vocês tem que simular aqueles acessos à memória. Ou seja, não precisa ter uma thread representando cada processo e cada um deles executando durante a execução do simulador. Basta agendar eventos no simulador que ocorrerão nos instantes de acesso à memória.
-
-
-	RASCUNHO:
-
-	memória virtual: múltiplo de p
-	memória física: múltiplo de s (sim, é múltiplo de s - tem dúvida no PACA)
-	bitmap pra memória virtual e memória física (?)
-	utilizar long (pois num max de proc é 2^32)
-	tabela de páginas
-
-	while (t0 de próximo proc_i não bateu) {
-		foreach (proc : X) {
-			if (proc.tf não bateu) {
-				if (proc.ti bateu) {
-					if (proc.pi não está na memória física)
-						algoritmo de substituição (proc.pi);
-						e todas as m3rd4s que isso causa na memória física
-						não esquecer das tabelas, amore
-				}
-			} else {
-				X.remove(proc);
-			}
-		}
-	}
-
-		X.insere (proc_i);
-		e todas as m3rd4s que isso causa na memória virtual
-		i++;
-	}
-	
-
-
-        char buffer[512];
-
-    if (stat ("/tmp", NULL) == -1)
-        mkdir ("/tmp", 0700);
-
-    sprintf (buffer, "/tmp/%s", nome);
-    arquivo = fopen (buffer, "r");
-
