@@ -14,6 +14,7 @@ public class Process {
     private int base, limit;
     private String nome;
     private double t0, tf;
+    private int accessLength;
     private Queue<Integer> AccessPage;
     private Queue<Double> AccessTime;
 
@@ -24,6 +25,7 @@ public class Process {
         this.tf = tf;
         this.b = b;
         this.base = this.limit = -1;
+        this.accessLength = 0;
         AccessPage = new Queue<Integer>();
         AccessTime = new Queue<Double>();
     }
@@ -66,18 +68,25 @@ public class Process {
         this.limit = -1;
     }
 
+    public void prepareAccess() {
+        accessLength = AccessPage.size();
+    }
+
     public void newAccess(int p, double t) {
         AccessPage.enqueue(p);
         AccessTime.enqueue(t);
     }
 
-    public void accessDone() {
-        AccessPage.dequeue();
-        AccessTime.dequeue();
+    public void accessDone() {        
+        int p = AccessPage.dequeue();
+        double t = AccessTime.dequeue();
+        AccessPage.enqueue(p);
+        AccessTime.enqueue(t);
+        accessLength--;
     }
 
     public double nextAccessTime() {
-        if (AccessTime.isEmpty()) return -1;
+        if (accessLength == 0) return -1;
         return AccessTime.peek();
     }
 
@@ -117,6 +126,6 @@ public class Process {
     }
 
     public int remainingSize() {
-        return AccessPage.size();
+        return accessLength;
     }
 }

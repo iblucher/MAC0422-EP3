@@ -143,21 +143,21 @@ public class Simulator {
     }
 
     public void simulate (int m, int r, int interval) {
-        initMemory();
+        for (int i = 0; i < num_process; i++) {
+            plist[i].prepareAccess();
+        }
 
         RedBlackBST<Integer, Integer> set = new RedBlackBST<Integer, Integer>();
         SpaceManagement virtualMemory = new SpaceManagement(m, virtual, p);
         PageReplacement physicalMemory = new PageReplacement(r, total, virtual, s, p, plist, num_process);
         PageTable table = new PageTable(virtual/p);
         long startTime = System.currentTimeMillis();
-        
         long lastPrint = System.currentTimeMillis();
-        printMemory();
+
         long lastBitUpdate = System.currentTimeMillis();
         table.update();
-        long lastLruUpdate;
+        long lastLruUpdate = System.currentTimeMillis();
         if (m == 4) {
-            lastLruUpdate = System.currentTimeMillis();
             physicalMemory.LRUupdate(table);
         }
 
@@ -168,11 +168,11 @@ public class Simulator {
                         lastPrint = System.currentTimeMillis();
                         printMemory();
                     }
-                    if ((double)(System.currentTimeMillis() - lastPrint)/1000 > quantum) {
+                    if ((double)(System.currentTimeMillis() - lastBitUpdate)/1000 > quantum) {
                         lastBitUpdate = System.currentTimeMillis();
                         table.update();
                     }
-                    if (m == 4 && (double)(System.currentTimeMillis() - lastPrint)/1000 > quantum/8) {
+                    if (m == 4 && (double)(System.currentTimeMillis() - lastLruUpdate)/1000 > quantum/8) {
                         lastLruUpdate = System.currentTimeMillis();
                         physicalMemory.LRUupdate(table);
                     }
@@ -205,11 +205,11 @@ public class Simulator {
                     lastPrint = System.currentTimeMillis();
                     printMemory();
                 }
-                if ((double)(System.currentTimeMillis() - lastPrint)/1000 > quantum) {
+                if ((double)(System.currentTimeMillis() - lastBitUpdate)/1000 > quantum) {
                     lastBitUpdate = System.currentTimeMillis();
                     table.update();
                 }
-                if (m == 4 && (double)(System.currentTimeMillis() - lastPrint)/1000 > quantum/8) {
+                if (m == 4 && (double)(System.currentTimeMillis() - lastLruUpdate)/1000 > quantum/8) {
                     lastLruUpdate = System.currentTimeMillis();
                     physicalMemory.LRUupdate(table);
                 }
