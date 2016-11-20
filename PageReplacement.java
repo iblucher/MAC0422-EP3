@@ -15,6 +15,7 @@ public class PageReplacement {
 
 	private OptimalList olist;
     private Queue<Integer> fifo;
+    private Clock<Integer> clock;
 
 	public PageReplacement(int method, int total, int s, int p, Process[] plist, int num_process) {
 		this.method = method;
@@ -30,7 +31,7 @@ public class PageReplacement {
 				fifo = new Queue<Integer>();
 				break;
 			case 3:
-				// dunno
+		        clock = new Clock<Integer>();
 				break;
 			case 4:
 				// dunno
@@ -123,7 +124,32 @@ public class PageReplacement {
 	}
 
 	private void clock(long[][] memory, boolean[] bitmap, Process proc, int page, PageTable table) {
-        
+        if (num_pages < total/p) {
+			for (int i = num_pages * p/s; i < (num_pages + 1) * p/s; i ++) {
+				memory[i][0] = proc.PID();
+				memory[i][1] = page;
+				bitmap[i] = true;
+			}
+			table.include(proc.base() + page, num_pages * p/s);
+            clock.insert(proc.base() + page);
+			num_pages++;
+			return;
+		}
+
+        int address = clock.pointedItem();
+        while (table.bitR(address)) {
+            table.clearBitR(address);
+            clock.nextPoint();
+            address = clock.pointedItem();
+        }
+
+        address = table.query(address);
+        table.remove(address);
+        memory[address][0] = proc.PID();
+		memory[address][1] = page;
+		bitmap[address] = true;
+		table.include(proc.base() + page, address);
+        clock.changeItem(proc.base() + page);
 	}
 
 	private void leastRecentlyUsed(long[][] memory, boolean[] bitmap, Process proc, int page, PageTable table) {
