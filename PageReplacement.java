@@ -60,7 +60,7 @@ public class PageReplacement {
 
 	private void optimal(long[][] memory, boolean[] bitmap, Process proc, int page, PageTable table) {
         if (num_pages < total/p) {
-			for (int i = num_pages * p/s; i < (num_pages + 1) * p/s; i ++) {
+			for (int i = num_pages * p/s; i < (num_pages + 1) * p/s; i++) {
 				memory[i][0] = proc.PID();
 				memory[i][1] = page;
 				bitmap[i] = true;
@@ -88,15 +88,17 @@ public class PageReplacement {
 
 		olist.remove(memory[address][0], (int)memory[address][1]);
 		table.remove(address);
-		memory[address][0] = proc.PID();
-		memory[address][1] = page;
-		bitmap[address] = true;
+        for (int i = address; i < address + p/s; i++) {
+			memory[i][0] = proc.PID();
+			memory[i][1] = page;
+			bitmap[i] = true;
+		}
 		table.include(proc.base() + page, address);
 	}
 
 	private void secondChance(long[][] memory, boolean[] bitmap, Process proc, int page, PageTable table) {
         if (num_pages < total/p) {
-			for (int i = num_pages * p/s; i < (num_pages + 1) * p/s; i ++) {
+			for (int i = num_pages * p/s; i < (num_pages + 1) * p/s; i++) {
 				memory[i][0] = proc.PID();
 				memory[i][1] = page;
 				bitmap[i] = true;
@@ -116,16 +118,18 @@ public class PageReplacement {
 
         address = table.query(address);
         table.remove(address);
-        memory[address][0] = proc.PID();
-		memory[address][1] = page;
-		bitmap[address] = true;
+        for (int i = address; i < address + p/s; i++) {
+			memory[i][0] = proc.PID();
+			memory[i][1] = page;
+			bitmap[i] = true;
+		}
 		table.include(proc.base() + page, address);
         fifo.enqueue(proc.base() + page);
 	}
 
 	private void clock(long[][] memory, boolean[] bitmap, Process proc, int page, PageTable table) {
         if (num_pages < total/p) {
-			for (int i = num_pages * p/s; i < (num_pages + 1) * p/s; i ++) {
+			for (int i = num_pages * p/s; i < (num_pages + 1) * p/s; i++) {
 				memory[i][0] = proc.PID();
 				memory[i][1] = page;
 				bitmap[i] = true;
@@ -145,13 +149,16 @@ public class PageReplacement {
 
         address = table.query(address);
         table.remove(address);
-        memory[address][0] = proc.PID();
-		memory[address][1] = page;
-		bitmap[address] = true;
+        for (int i = address; i < address + p/s; i++) {
+			memory[i][0] = proc.PID();
+			memory[i][1] = page;
+			bitmap[i] = true;
+		}
 		table.include(proc.base() + page, address);
         clock.changeItem(proc.base() + page);
 	}
 
 	private void leastRecentlyUsed(long[][] memory, boolean[] bitmap, Process proc, int page, PageTable table) {
+        
 	}
 }
