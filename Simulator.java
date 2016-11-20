@@ -181,6 +181,7 @@ public class Simulator {
                         int p = plist[j].nextAccessPage();
                         physicalMemory.insert(memTot, bitTot, plist[j], p, table);
                         updateMemory();
+                        plist[j].accessDone();
                     }
 
                     if ((double)(System.currentTimeMillis() - startTime)/1000 > plist[j].tf()) {
@@ -202,8 +203,14 @@ public class Simulator {
                     lastPrint = System.currentTimeMillis();
                     printMemory();
                 }
-
-
+                if ((double)(System.currentTimeMillis() - lastPrint)/1000 > quantum) {
+                    lastBitUpdate = System.currentTimeMillis();
+                    table.update();
+                }
+                if (m == 4 && (double)(System.currentTimeMillis() - lastPrint)/1000 > quantum/8) {
+                    lastLruUpdate = System.currentTimeMillis();
+                    physicalMemory.LRUupdate(table);
+                }
                 
                 double t = plist[j].nextAccessTime();
 
@@ -211,6 +218,7 @@ public class Simulator {
                     int p = plist[j].nextAccessPage();
                     physicalMemory.insert(memTot, bitTot, plist[j], p, table);
                     updateMemory();
+                    plist[j].accessDone();
                 }
 
                 if ((double)(System.currentTimeMillis() - startTime)/1000 > plist[j].tf()) {
