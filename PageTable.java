@@ -37,8 +37,8 @@ public class PageTable {
     	for (virtualAddress = 0; virtualAddress < size; virtualAddress++) {
   			if (address[virtualAddress] == physicalAddress) break;
     	}
-    	address[virtualAddress] = -1;
-    	clearBitR(virtualAddress);
+        address[virtualAddress] = -1;
+        clearBitR(virtualAddress);
     }
 
     public boolean bitR (int virtualAddress) {

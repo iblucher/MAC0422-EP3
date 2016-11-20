@@ -30,6 +30,8 @@ public class Simulator {
         if (!dir.exists()) {
             dir.mkdir();
         }
+
+        sim.initMemory();
     }
 
     public void loadFile (String name) {
@@ -143,6 +145,8 @@ public class Simulator {
     }
 
     public void simulate (int m, int r, int interval) {
+        initMemory();
+
         RedBlackBST<Integer, Integer> set = new RedBlackBST<Integer, Integer>();
         SpaceManagement virtualMemory = new SpaceManagement(m, virtual, p);
         PageReplacement physicalMemory = new PageReplacement(r, total, virtual, s, p, plist, num_process);
