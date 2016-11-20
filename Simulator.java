@@ -30,8 +30,6 @@ public class Simulator {
         if (!dir.exists()) {
             dir.mkdir();
         }
-
-        sim.initMemory();
     }
 
     public void loadFile (String name) {
