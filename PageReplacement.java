@@ -82,15 +82,17 @@ public class PageReplacement {
 		int address = 0;
 
 		for (int i = 0; i < len; i++) {
-			double label = olist.label(memory[i][0], (int)memory[i][1]);
+            if (memory[i][0] != -1) {
+			    double label = olist.label(memory[i][0], (int)memory[i][1]);
 
-            if (label == -1) {
-				address = i;
-                break;
-			} else if (max < label) {
-				max = label;
-				address = i;
-			}
+                if (label == -1) {
+				    address = i;
+                    break;
+			    } else if (max < label) {
+				    max = label;
+				    address = i;
+			    }
+            }
 		}
 
 		table.remove(address);
