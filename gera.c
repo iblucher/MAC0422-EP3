@@ -10,10 +10,12 @@ int main () {
     linhas = 100;                    // número de processos (entre 1 e 100)
     t0 = 1;                                        // tempo inicial (entre 1 e 5)
     for (i = 0; i < linhas; i++) {
-        tf = 1 + (rand()%10) + t0;                 // delta t + t0 (No máximo 10 seg de execução)
+        tf = 2 + (rand()%10) + t0;                 // delta t + t0 (No máximo 10 seg de execução)
         b = 64 + (rand()%64);                      // total de memória usado (entre 64 e 128)
         printf("%d proc%d %d %d ", t0, i, tf, b);
         n = (tf-t0);                               // número de pags e instantes que ele as acessa (1 por segundo)
+        printf("0 %d ", t0);
+        printf("1 %d ", t0 + 1);
         for (j = 0; j < n; j++) {
             pi = 1 + (rand()%16);                  // o numero da pag que ele acessa (entre 1 e 16 = 64/4) 
             while (pi*p > b)
@@ -22,6 +24,8 @@ int main () {
             if (j == 0 || rand() > (0.3*RAND_MAX)) // Prob de 70% de nesse instante ele mexer em uma pagina
                 printf("%d %d ", pi, ti);          // Mexe em uma pelo menos.
         }
+        printf("1 %d ", tf - 1);
+        printf("0 %d ", tf);
         printf("\n");
         if (rand() > (0.6*RAND_MAX))
             t0++;
