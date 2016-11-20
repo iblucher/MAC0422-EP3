@@ -120,16 +120,13 @@ public class Simulator {
     }
 
     public void printMemory () {
-        String none = "--------------------------------";
-
         StdOut.println("Memória física:");
         for (int i = 0; i < total; i++) {
             int b = (bitTot[i/s]) ? 1 : 0;
             if (memTot[i/s][0] != -1) {
-                String bits = String.format("%32s", Integer.toBinaryString((int)memTot[i/s][0])).replace(' ', '0');
-                StdOut.println(bits + "    " + b);
+                StdOut.println(b + "  " + plist[(int)memTot[i/s][0]].nome());
             } else {
-                StdOut.println(none + "    " + b);
+                StdOut.println(b + "  -");
             }
         }
         
@@ -137,10 +134,9 @@ public class Simulator {
         for (int i = 0; i < virtual; i++) {
             int b = (bitVir[i/p]) ? 1 : 0;
             if (memVir[i/p] != -1) {
-                String bits = String.format("%32s", Integer.toBinaryString((int)memVir[i/p])).replace(' ', '0');
-                StdOut.println(bits + "    " + b);
+                StdOut.println(b + "  " + plist[(int)memVir[i/p]].nome());
             } else {
-                StdOut.println(none + "    " + b);
+                StdOut.println(b + "  -");
             }
         }
         StdOut.println();
