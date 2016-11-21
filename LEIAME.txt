@@ -19,7 +19,4 @@
 	Para compilar apenas digite no terminal o comando "make".
 
 - Execução:
-	Para rodar apenas digite no terminal o comando "make run". 
-
-- Comentários adicionais: infelizmente não todos os algoritmos funcionam e os 
-  por isso alguns testes ficaram inacabados. 
+	Para rodar apenas digite no terminal o comando "make run".

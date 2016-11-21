@@ -119,22 +119,23 @@ public class Simulator {
         outVir.close();
     }
 
+    // imprime por unidades de alocação
     public void printMemory () {
         StdOut.println("Memória física:");
-        for (int i = 0; i < total; i++) {
-            int b = (bitTot[i/s]) ? 1 : 0;
-            if (memTot[i/s][0] != -1) {
-                StdOut.println(b + "  " + plist[(int)memTot[i/s][0]].nome());
+        for (int i = 0; i < total/s; i++) {
+            int b = (bitTot[i]) ? 1 : 0;
+            if (memTot[i][0] != -1) {
+                StdOut.println(b + "  " + plist[(int)memTot[i][0]].nome());
             } else {
                 StdOut.println(b + "  -");
             }
         }
         
         StdOut.println("Memória virtual:");
-        for (int i = 0; i < virtual; i++) {
-            int b = (bitVir[i/p]) ? 1 : 0;
-            if (memVir[i/p] != -1) {
-                StdOut.println(b + "  " + plist[(int)memVir[i/p]].nome());
+        for (int i = 0; i < virtual/s; i++) {
+            int b = (bitVir[i*s/p]) ? 1 : 0;
+            if (memVir[i*s/p] != -1) {
+                StdOut.println(b + "  " + plist[(int)memVir[i*s/p]].nome());
             } else {
                 StdOut.println(b + "  -");
             }
@@ -231,9 +232,9 @@ public class Simulator {
             }
         }
 
-        StdOut.println("Tempo total de execução: " + (double)(System.currentTimeMillis() - startTime)/1000 + "s");
-        StdOut.println("Tempo total de busca por espaço livre: " + virtualMemory.time_spent() + "s");
-        StdOut.println("Número de page faults: " + physicalMemory.page_faults());
+        //StdOut.println("Tempo total de execução: " + (double)(System.currentTimeMillis() - startTime)/1000 + "s");
+        //StdOut.println("Tempo total de busca por espaço livre: " + virtualMemory.time_spent() + "s");
+        //StdOut.println("Número de page faults: " + physicalMemory.page_faults());
         
     }
 
