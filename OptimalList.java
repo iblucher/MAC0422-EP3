@@ -20,11 +20,11 @@ public class OptimalList {
     }
 
     public double label(long PID, int p) {
-    	if (labelTree[(int)PID].get(p).isEmpty()) return -1;
-    	return labelTree[(int)PID].get(p).peek();
+        if (labelTree[(int)PID].get(p).isEmpty()) return -1;
+        return labelTree[(int)PID].get(p).peek();
     }
 
     public void remove(long PID, int p) {
- 		labelTree[(int)PID].get(p).dequeue();
+        labelTree[(int)PID].get(p).dequeue();
     }
 }

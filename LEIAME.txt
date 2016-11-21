@@ -4,7 +4,7 @@
  *  Isabela Blucher - 9298170
  *  Andre Victor dos Santos Nakazawa - 9298336
  * 
- *  README DO EP3
+ *  LEIAME DO EP3
  *
 *******************************************************************************/
 
@@ -20,3 +20,6 @@
 
 - Execução:
 	Para rodar apenas digite no terminal o comando "make run". 
+
+- Comentários adicionais: infelizmente não todos os algoritmos funcionam e os 
+  por isso alguns testes ficaram inacabados. 
