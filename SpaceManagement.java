@@ -131,7 +131,7 @@ public class SpaceManagement {
 
 	private void bestFit(long[] memory, boolean[] bitmap, Process proc) {
 		int nbits = bitmap.length;
-		int min = nbits;
+		int min = nbits + 1;
 		int mindex = -1;
 
         long startTime = System.currentTimeMillis();
@@ -141,9 +141,9 @@ public class SpaceManagement {
 			
 			while (i < nbits && !bitmap[i++]);
 
-			if (proc.b() <= (i - base) * p && (i - base) * p < min) {
+			if (proc.b() <= (i - base) * p && i - base < min) {
 				mindex = base;
-				min = (i - mindex) * p;
+				min = i - mindex;
 			}
 		}
 
@@ -170,9 +170,9 @@ public class SpaceManagement {
 			
 			while (i < nbits && !bitmap[i++]);
 
-			if (proc.b() <= (i - base) * p && max < (i - base) * p) {
+			if (proc.b() <= (i - base) * p && max < i - base) {
 				mindex = base;
-				max = (i - mindex) * p;
+				max = i - mindex;
 			}
 		}
 

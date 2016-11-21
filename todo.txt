@@ -1,5 +1,7 @@
 TO-DO:
 
+Fixe espaço 1, substitui 1.
+
 + Simulador (gerenciador de memória)
 	+ criar diretório tmp
 	+ ler arquivo de trace e pegar informações

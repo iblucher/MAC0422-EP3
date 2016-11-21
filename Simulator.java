@@ -157,7 +157,7 @@ public class Simulator {
         long lastBitUpdate = System.currentTimeMillis();
         table.update();
         long lastLruUpdate = System.currentTimeMillis();
-        if (m == 4) {
+        if (r == 4) {
             physicalMemory.LRUupdate(table);
         }
 
@@ -172,7 +172,7 @@ public class Simulator {
                         lastBitUpdate = System.currentTimeMillis();
                         table.update();
                     }
-                    if (m == 4 && (double)(System.currentTimeMillis() - lastLruUpdate)/1000 > quantum/8) {
+                    if (r == 4 && (double)(System.currentTimeMillis() - lastLruUpdate)/1000 > quantum/8) {
                         lastLruUpdate = System.currentTimeMillis();
                         physicalMemory.LRUupdate(table);
                     }
@@ -209,7 +209,7 @@ public class Simulator {
                     lastBitUpdate = System.currentTimeMillis();
                     table.update();
                 }
-                if (m == 4 && (double)(System.currentTimeMillis() - lastLruUpdate)/1000 > quantum/8) {
+                if (r == 4 && (double)(System.currentTimeMillis() - lastLruUpdate)/1000 > quantum/8) {
                     lastLruUpdate = System.currentTimeMillis();
                     physicalMemory.LRUupdate(table);
                 }
