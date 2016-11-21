@@ -190,6 +190,9 @@ public class Simulator {
                     if ((double)(System.currentTimeMillis() - startTime)/1000 > plist[j].tf()) {
                         virtualMemory.remove(memVir, bitVir, plist[j]);
                         set.delete(j);
+                        if (r == 1) {
+                            physicalMemory.OptimalFree(plist[j].PID());
+                        }
                         updateMemory();
                     }
                 }
@@ -227,6 +230,9 @@ public class Simulator {
                 if ((double)(System.currentTimeMillis() - startTime)/1000 > plist[j].tf()) {
                     virtualMemory.remove(memVir, bitVir, plist[j]);
                     set.delete(j);
+                    if (r == 1) {
+                        physicalMemory.OptimalFree(plist[j].PID());
+                    }
                     updateMemory();
                 }
             }

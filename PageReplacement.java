@@ -204,6 +204,10 @@ public class PageReplacement {
 		table.include(proc.base() + page, address);
 	}
 
+    public void OptimalFree(long PID) {
+        olist.free(PID);
+    }
+
     public void LRUupdate(PageTable table) {
         lru.update(table);
     }

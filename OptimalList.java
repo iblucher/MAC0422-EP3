@@ -20,11 +20,16 @@ public class OptimalList {
     }
 
     public double label(long PID, int p) {
+        if (labelTree[(int)PID].isEmpty()) return -1;
         if (labelTree[(int)PID].get(p).isEmpty()) return -1;
         return labelTree[(int)PID].get(p).peek();
     }
 
     public void remove(long PID, int p) {
         labelTree[(int)PID].get(p).dequeue();
+    }
+
+    public void free(long PID) {
+        labelTree[(int)PID] = new RedBlackBST<Integer, Queue<Double>>();
     }
 }
